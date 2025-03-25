@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Status {
+  PENDING
+  INPROGRESS
+  COMPLETED
+}
+
+model User {
+  id  Int  @id @default(autoincrement())
+  email  String  @unique
+  name  String
+  password  String
+  created_at  DateTime  @default(now())
+  userCompanies  User_Company[]
+  project_user_co Project_User_Co[]  
+  assigned Assigned[]  
+  comments Comment[]
+}
+
+model Company {
+  id  Int  @id @default(autoincrement())
+  name  String
+  created_at  DateTime  @default(now())
+  userCompanies  User_Company[]
+  projects Project[]
+}
+
+model User_Company {
+  userId  Int
+  companyId  Int
+  role  Role
+  user  User  @relation(fields: [userId], references: [id] , onDelete: Cascade)
+  company  Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  @@id([userId,companyId])
+}
+
+model Project{
+  id  Int  @id @default(autoincrement())
+  name String  
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
+  created_at  DateTime  @default(now())
+  tasks Task[]
+  project_uc Project_User_Co[]
+}
+
+model Project_User_Co{
+  userId Int
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
+  projectId Int  
+  project Project @relation(fields: [projectId], references: [id],onDelete: Cascade)
+  created_at  DateTime  @default(now())
+  @@id([userId,projectId])
+}
+
+model Task{
+  id  Int  @id @default(autoincrement())
+  name String
+  projectId Int
+  project Project @relation(fields: [projectId], references: [id],onDelete: Cascade)
+  created_at  DateTime  @default(now())
+  todos Todo[]
+}
+
+model Todo{
+  id  Int  @id @default(autoincrement())
+  name String
+  taskId Int
+  task Task @relation(fields: [taskId], references: [id])
+  status Status
+  priority Int  @default(1)
+  dueDate DateTime?
+  comments Comment[]
+}
+
+model Assigned{
+  todoId Int
+  userId Int
+  user User @relation(fields:[userId], references:[id],onDelete: Cascade)
+  @@id([todoId,userId])
+}
+
+model Comment{
+  id  Int  @id @default(autoincrement())
+  todoId Int
+  todo Todo @relation(fields: [todoId], references: [id],onDelete: Cascade)
+  text String
+  userId Int
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)  
+}
