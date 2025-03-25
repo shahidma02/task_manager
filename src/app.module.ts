@@ -7,10 +7,12 @@ import { AuthModule } from './auth/auth.module';
 
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { ProjectsModule } from './projects/projects.module';
+import { TasksModule } from './tasks/tasks.module';
 
 
 @Module({
-  imports: [UsersModule, CompanyModule, AuthModule],
+  imports: [UsersModule, CompanyModule, AuthModule, ProjectsModule, TasksModule],
   controllers: [AppController],
   providers: [AppService,
   //   {

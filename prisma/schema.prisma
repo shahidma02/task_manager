@@ -59,6 +59,7 @@ model Project{
   companyId Int
   company   Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
   created_at  DateTime  @default(now())
+  deadline DateTime
   tasks Task[]
   project_uc Project_User_Co[]
 }
