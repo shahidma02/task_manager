@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateTodoDTO } from './createTodoDTO';
 import { addDays } from 'date-fns';
 import { assignTodoDTO } from './assignTodoDTO';
+import { UpdateTodoDTO } from './updateTodoDto';
 
 @Injectable()
 export class TodosService {
@@ -34,7 +35,7 @@ export class TodosService {
     return todo;
   }
 
-  async updateTodo(id: number, payload: CreateTodoDTO): Promise<any> {
+  async updateTodo(id: number, payload: UpdateTodoDTO): Promise<any> {
     const todo = await this.prisma.todo.findUnique({ where: { id } });
     if (!todo) {
       throw new NotFoundException(`todo with ID ${id} not found`);

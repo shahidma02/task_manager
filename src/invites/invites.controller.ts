@@ -34,6 +34,7 @@ export class InvitesController {
     return this.inviteServices.viewInvites(userId);
   }
 
+  @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.inviteServices.remove(id);
