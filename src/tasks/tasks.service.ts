@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma.service';
 export class TasksService {
   constructor(private prisma: PrismaService) {}
 
-  async create(id: number, payload: CreateTaskDTO): Promise<any> {
+  async create(payload: CreateTaskDTO): Promise<any> {
     const task = await this.prisma.task.create({
       data: payload,
     });
@@ -25,7 +25,7 @@ export class TasksService {
     return task;
   }
 
-  async updateProject(id: number, payload: CreateTaskDTO): Promise<any> {
+  async updateTask(id: number, payload: CreateTaskDTO): Promise<any> {
     const task = await this.prisma.task.findUnique({ where: { id } });
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);

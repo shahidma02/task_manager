@@ -32,26 +32,6 @@ export class UsersService {
         });
     }
 
-    // async login(email: string, password: string):Promise<string> {
-    //     const user = await this.prisma.user.findUnique({ where: { email } });
-    //     if (!user) {
-    //         throw new UnauthorizedException('Invalid credentials');
-    //     }
-        
-    //     const isPasswordValid = await bcrypt.compare(password, user.password);
-    //     if (!isPasswordValid) {
-    //         throw new UnauthorizedException('Invalid credentials');
-    //     }
-    //     const token = await this.jwtService.signAsync(
-    //         {
-    //             email: user.email,
-    //             id: user.id
-    //         }, {expiresIn:'1d'},
-    //     )
-    //     localStorage.setItem("authToken", token)
-    //     return token
-    // }
-
     async findAll() {
         return this.prisma.user.findMany();
     }
@@ -88,4 +68,6 @@ export class UsersService {
         }
         return this.prisma.user.delete({ where: { id } });
     }
+
+    // async sendInvite()
 }

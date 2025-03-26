@@ -13,6 +13,7 @@ import { Public } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDTO } from './createProjectDto';
+import { addUserDTO } from './addUserDTO';
 
 @Controller('projects')
 export class ProjectsController {
@@ -31,12 +32,13 @@ export class ProjectsController {
   }
 
   @Get('/:id')
-  async findOne(@Param('id') id: number) {
-    return await this.projectService.findOne(id);
+  async findOne(@Param('id') id: string) {
+      return await this.projectService.findOne(Number(id));
   }
 
+
   @Patch('/:id')
-  async updateUser(
+  async updateProject(
     @Param('id') id: number,
     @Body() createProjectDto: CreateProjectDTO,
   ) {
@@ -46,5 +48,11 @@ export class ProjectsController {
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.projectService.remove(id);
+  }
+
+  @Post('/add-user')
+  @UseGuards(AuthGuard)
+  async addUser(@Body() payload: addUserDTO) {
+      return await this.projectService.addUser(payload);
   }
 }
