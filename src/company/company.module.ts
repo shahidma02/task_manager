@@ -8,12 +8,13 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @Module({
   controllers: [CompanyController],
-  providers: [CompanyService,PrismaService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
-  ]
-
+  providers: [
+    CompanyService,
+    PrismaService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
+  ],
 })
 export class CompanyModule {}

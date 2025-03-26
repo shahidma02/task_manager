@@ -13,6 +13,8 @@ import { CreateUserDto } from './createUserDTO';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './updateUserDTO';
 import { Public } from 'src/auth/auth.decorator';
+import { Roles } from 'src/roles/roles.decorator';
+import { Role } from 'src/roles/role.enum';
 
 @Controller('users')
 export class UsersController {
@@ -42,6 +44,7 @@ export class UsersController {
     return await this.userServices.updateUser(id, updateUserDto);
   }
 
+  @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.userServices.remove(id);

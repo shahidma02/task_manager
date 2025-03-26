@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SendInviteDto } from './sendInviteDTO';
 import { PrismaService } from 'src/prisma.service';
+import { UserCompanyDto } from 'src/company/userCompanyDto';
+import { Role } from 'src/roles/role.enum';
 
 @Injectable()
 export class InvitesService {
   constructor(private prisma: PrismaService) {}
+
   async sendInvite(payload: SendInviteDto) {
     console.log(payload);
     const user = await this.prisma.user.findUnique({
@@ -34,10 +37,21 @@ export class InvitesService {
 
   async remove(id: number) {
     const invite = await this.prisma.invitation.findUnique({ where: { id } });
+
     if (!invite) {
       throw new NotFoundException(`Invitation with ID ${id} not found`);
     }
-    return this.prisma.invitation.delete({ where: { id } });
+
+    await this.prisma.invitation.delete({ where: { id } });
+
+    return await this.prisma.user_Company.delete({
+      where: {
+        userId_companyId: {
+          userId: invite.sentTo,
+          companyId: invite.companyId,
+        },
+      },
+    });
   }
 
   async acceptInvite(userId: number, inviteId: number) {
@@ -54,12 +68,13 @@ export class InvitesService {
       data: { status: 'ACCEPTED' },
     });
 
-    const addMember = await this.prisma.user_Company.create({
-      data: {
-        userId: userId,
-        companyId: invite.companyId,
-        role: 'MEMBER',
-      },
+    const userCompanyDto = new UserCompanyDto();
+    userCompanyDto.userId = userId;
+    userCompanyDto.companyId = invite.companyId;
+    userCompanyDto.role = Role.MEMBER;
+
+    await this.prisma.user_Company.create({
+      data: userCompanyDto,
     });
   }
 }

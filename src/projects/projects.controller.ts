@@ -33,9 +33,8 @@ export class ProjectsController {
 
   @Get('/:id')
   async findOne(@Param('id') id: string) {
-      return await this.projectService.findOne(Number(id));
+    return await this.projectService.findOne(Number(id));
   }
-
 
   @Patch('/:id')
   async updateProject(
@@ -51,8 +50,9 @@ export class ProjectsController {
   }
 
   @Post('/add-user')
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @Public()
   async addUser(@Body() payload: addUserDTO) {
-      return await this.projectService.addUser(payload);
+    return await this.projectService.addUser(payload);
   }
 }

@@ -9,11 +9,12 @@ export class TodosService {
   constructor(private prisma: PrismaService) {}
 
   async create(payload: CreateTodoDTO): Promise<any> {
-    const dueDate = addDays(new Date(), payload.duration);
+    const { duration, ...data } = payload;
+    const dueDate = addDays(new Date(), duration);
 
     const todo = await this.prisma.todo.create({
       data: {
-        ...payload,
+        ...data,
         due_at: dueDate,
       },
     });
