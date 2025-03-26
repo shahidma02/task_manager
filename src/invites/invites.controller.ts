@@ -15,13 +15,15 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enum';
 import { AuthController } from 'src/auth/auth.controller';
 import { RolesGuard } from 'src/roles/roles.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
+
 
 @Controller('invites')
 export class InvitesController {
   constructor(private inviteServices: InvitesService) {}
 
-  @Roles(Role.ADMIN)
-  @UseGuards(AuthController, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)  
   @Post('/send-invite')
   async sendInvite(@Body() inviteDto: SendInviteDto) {
     console.log('hello');
@@ -40,6 +42,7 @@ export class InvitesController {
     return await this.inviteServices.remove(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch('/:id')
   async acceptInvite(@Param('id') id: number, @Request() req) {
     const userId = req.user.sub;

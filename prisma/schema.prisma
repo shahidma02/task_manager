@@ -35,8 +35,6 @@ enum Priority {
   HIGH
 }
 
-
-
 model User {
   id  Int  @id @default(autoincrement())
   email  String  @unique
@@ -50,14 +48,13 @@ model User {
   invitation Invitation []
 } 
 
-model Invitation{
+model Invitation {
   id  Int  @id @default(autoincrement())
   companyId Int
-  company   Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
   sentTo Int
-  user  User  @relation(fields: [sentTo], references: [id] , onDelete: Cascade)
   status Invite @default(UNACCEPTED)
-
+  company   Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
+  user  User  @relation(fields: [sentTo], references: [id] , onDelete: Cascade)
 }
 
 model Company {
@@ -116,12 +113,14 @@ model Todo{
   created_at  DateTime  @default(now())
   due_at DateTime?
   comments Comment[]
+  assigned Assigned []
 }
 
 model Assigned{
   todoId Int
   userId Int
   user User @relation(fields:[userId], references:[id],onDelete: Cascade)
+  todo Todo @relation(fields:[todoId], references:[id], onDelete: Cascade)
   @@id([todoId,userId])
 }
 

@@ -19,6 +19,7 @@ export class ProjectsModule {
       .apply(ProjectMiddleware)
       .forRoutes(
         { path: 'projects', method: RequestMethod.GET },
+        { path: 'projects/:id', method: RequestMethod.GET },
         { path: 'projects', method: RequestMethod.PATCH },
       );
   }

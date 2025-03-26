@@ -23,17 +23,32 @@ export class ProjectsService {
       },
     });
 
+    await this.prisma.project_User_Co.create({
+      data: {
+        userId: id,
+        projectId: project.id,
+        
+      },
+    });
+
     return project;
   }
 
-  async findAll() {
-    return this.prisma.project.findMany();
+  async findAll(companyId:number) {
+    return this.prisma.project.findMany(
+      {
+        where:{companyId:companyId}
+      }
+    );
   }
 
-  async findOne(id: number) {
-    const project = await this.prisma.project.findUnique({ where: { id } });
+  async findOne(projectId: number, companyId:number) {
+    const project = await this.prisma.project.findUnique({ where: {
+      id: projectId,
+      companyId: companyId, 
+    }, });
     if (!project) {
-      throw new NotFoundException(`Project with ID ${id} not found`);
+      throw new NotFoundException(`Project with ID ${projectId} not found`);
     }
     return project;
   }

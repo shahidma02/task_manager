@@ -15,14 +15,14 @@ import { UsersService } from 'src/users/users.service';
     PrismaService,
     AuthService,
     UsersService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthModule,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthModule,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
   ],
 })
 export class InvitesModule {}

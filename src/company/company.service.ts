@@ -11,6 +11,7 @@ import { Public } from 'src/auth/auth.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UserCompanyDto } from './userCompanyDto';
 import { Role } from 'src/roles/role.enum';
+import { DeleteUserDto } from './deleteUserDto';
 
 @Injectable()
 export class CompanyService {
@@ -32,17 +33,34 @@ export class CompanyService {
     return company;
   }
 
-  async findAll() {
-    return this.prisma.company.findMany();
+  async findAll(id: number) {
+    return this.prisma.company.findMany({
+      where: {
+        userCompanies: {
+          some: { userId: id }, 
+        },
+      },
+    });
   }
+  
 
-  async findOne(id: number) {
-    const company = await this.prisma.company.findUnique({ where: { id } });
+  async findOne(id: number, userId: number) {
+    const company = await this.prisma.company.findUnique({
+      where: {
+        id,
+        userCompanies: {
+          some: { userId },
+        },
+      },
+    });
+  
     if (!company) {
-      throw new NotFoundException(`Company with ID ${id} not found`);
+      throw new NotFoundException(`Company with ID ${id} not found or access denied`);
     }
+  
     return company;
   }
+  
 
   async updateCompany(id: number, payload: UpdateCompanyDTO): Promise<any> {
     const company = await this.prisma.company.findUnique({ where: { id } });
@@ -61,5 +79,15 @@ export class CompanyService {
       throw new NotFoundException(`Company with ID ${id} not found`);
     }
     return this.prisma.company.delete({ where: { id } });
+  }
+
+  async removeUser(payload:DeleteUserDto){
+    const userCompany = await this.prisma.user_Company.findUnique({
+      where: { userId_companyId: { userId: payload.userId, companyId: payload.companyId } },
+    });
+    if (!userCompany) {
+      throw new NotFoundException(`Record not found`);
+    }
+    return this.prisma.user_Company.delete({ where: { userId_companyId: { userId: payload.userId, companyId: payload.companyId } }, });
   }
 }

@@ -18,15 +18,18 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('In auth guard')
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+    
     console.log(`Route is public: ${isPublic}`);
     if (isPublic) {
       return true;
     }
     const request = context.switchToHttp().getRequest();
+    console.log('User in AuthGuard:', request.user)
     const token = this.extractTokenFromHeader(request);
     console.log(token);
     if (!token) {
@@ -40,6 +43,7 @@ export class AuthGuard implements CanActivate {
       });
       console.log('payloadd:', payload);
       request['user'] = payload;
+      // request.user = payload
     } catch {
       console.log('not verified');
       throw new UnauthorizedException();
