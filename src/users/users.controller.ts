@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Request,
 } from '@nestjs/common';
 import { CreateUserDto } from './createUserDTO';
 import { UsersService } from './users.service';
@@ -23,11 +24,6 @@ export class UsersController {
     return await this.userServices.signup(createUserDto);
   }
 
-  // @Post('/login')
-  // async login(@Body() body: { email: string; password: string }) {
-  //     return await this.userServices.login(body.email, body.password);
-  // }
-
   @Get()
   async findAll() {
     return await this.userServices.findAll();
@@ -35,7 +31,7 @@ export class UsersController {
 
   @Get('/:id')
   async findOne(@Param('id') id: number) {
-    return await this.userServices.findOne(id);
+    return await this.userServices.findOne(Number(id));
   }
 
   @Patch('/:id')

@@ -11,8 +11,7 @@ export class CreateProjectDTO {
   @IsString()
   name: string;
 
-  // @IsOptional()
-  // @IsInt()
-  // @IsPositive()
-  // durationInDays: number;
+  @IsNotEmpty()
+  @IsInt()
+  companyId: number;
 }

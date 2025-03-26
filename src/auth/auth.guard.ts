@@ -10,10 +10,12 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/auth/auth.decorator';
 import { Reflector } from '@nestjs/core';
 
-
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService, private reflector: Reflector) {}
+  constructor(
+    private jwtService: JwtService,
+    private reflector: Reflector,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -26,28 +28,28 @@ export class AuthGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-    console.log(token)
+    console.log(token);
     if (!token) {
-      console.log('throuwing 401')
+      console.log('throuwing 401');
       throw new UnauthorizedException();
     }
     try {
-      console.log("Trying");
+      console.log('Trying');
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
+      console.log('payloadd:', payload);
       request['user'] = payload;
     } catch {
-      console.log('not verified')
+      console.log('not verified');
       throw new UnauthorizedException();
     }
     return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    console.log("Extracting");
+    console.log('Extracting');
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }
-

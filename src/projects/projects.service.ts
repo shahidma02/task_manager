@@ -9,8 +9,7 @@ export class ProjectsService {
 
   async create(id: number, payload: CreateProjectDTO): Promise<any> {
     const company = await this.prisma.user_Company.findFirst({
-      where: { userId: id },
-      select: { companyId: true },
+      where: { userId: id, companyId: payload.companyId },
     });
 
     if (!company) {
@@ -61,28 +60,33 @@ export class ProjectsService {
 
   async addUser(payload: addUserDTO) {
     const project = await this.prisma.project.findUnique({
-      where: { id: payload.projectId }
+      where: { id: payload.projectId },
     });
-  
+
     if (!project) {
-      throw new NotFoundException(`Project with ID ${payload.projectId} not found`);
+      throw new NotFoundException(
+        `Project with ID ${payload.projectId} not found`,
+      );
     }
-  
+
     const userCompanies = await this.prisma.user_Company.findMany({
-      where: { userId: payload.userId }
+      where: { userId: payload.userId },
     });
-  
+
     if (!userCompanies.length) {
-      throw new NotFoundException(`User with ID ${payload.userId} not found in any company`);
+      throw new NotFoundException(
+        `User with ID ${payload.userId} not found in any company`,
+      );
     }
-  
-    const isUserInCompany = userCompanies.some(uc => uc.companyId === project.companyId);
-  
+
+    const isUserInCompany = userCompanies.some(
+      (uc) => uc.companyId === project.companyId,
+    );
+
     if (!isUserInCompany) {
       throw new Error('User is not a member of this company');
     }
-  
+
     return await this.prisma.project_User_Co.create({ data: payload });
   }
-  
 }

@@ -11,10 +11,11 @@ import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TodosModule } from './todos/todos.module';
 import { CommentsModule } from './comments/comments.module';
+import { InvitesModule } from './invites/invites.module';
 
 
 @Module({
-  imports: [UsersModule, CompanyModule, AuthModule, ProjectsModule, TasksModule, TodosModule, CommentsModule],
+  imports: [UsersModule, CompanyModule, AuthModule, ProjectsModule, TasksModule, TodosModule, CommentsModule, InvitesModule],
   controllers: [AppController],
   providers: [AppService,
   //   {

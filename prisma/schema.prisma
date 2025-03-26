@@ -56,7 +56,8 @@ model Invitation{
   company   Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
   sentTo Int
   user  User  @relation(fields: [sentTo], references: [id] , onDelete: Cascade)
-  status Invite
+  status Invite @default(UNACCEPTED)
+
 }
 
 model Company {
