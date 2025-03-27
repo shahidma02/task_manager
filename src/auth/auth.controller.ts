@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
 import { Public } from './auth.decorator';
 import { CreateUserDto } from 'src/users/createUserDTO';
 import { AuthGuard } from '@nestjs/passport';
-import { AtGuard, RtGuard } from './common/gurads';
+import { AtGuard, RtGuard } from './common/guards';
 import { GetCurrentUser } from './common/decorators/getCurrentUser.decorator';
 @Controller('auth')
 export class AuthController {
@@ -41,6 +41,7 @@ export class AuthController {
     return this.authService.logoutLocal(user.sub);
   }
 
+  @Public()
   @UseGuards(RtGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)

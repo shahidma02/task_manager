@@ -12,7 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { TodosModule } from './todos/todos.module';
 import { CommentsModule } from './comments/comments.module';
 import { InvitesModule } from './invites/invites.module';
-import { AtGuard } from './auth/common/gurads';
+import { AtGuard } from './auth/common/guards';
 
 @Module({
   imports: [

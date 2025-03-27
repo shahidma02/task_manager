@@ -19,8 +19,9 @@ import { Role } from '@prisma/client';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { DeleteUserDto } from './deleteUserDto';
 import { RolesParamGuard } from 'src/roles/rolesParam.guard';
+import { AtGuard } from 'src/auth/common/guards/at.guard'
 
-@UseGuards(AuthGuard)
+@UseGuards(AtGuard)
 @Controller('company')
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
@@ -45,7 +46,7 @@ export class CompanyController {
     return await this.companyService.findOne(id, userId);
   }
 
-  @UseGuards(AuthGuard, RolesParamGuard)
+  @UseGuards(AtGuard, RolesParamGuard)
   @Roles(Role.ADMIN)
   @Patch('/:id')
   async updateCompany(
@@ -56,14 +57,14 @@ export class CompanyController {
     return await this.companyService.updateCompany(id, updateCompanyDto);
   }
 
-  @UseGuards(AuthGuard, RolesParamGuard)
+  @UseGuards(AtGuard, RolesParamGuard)
   @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.companyService.remove(id);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Delete()
   async removeUser(@Body() payload: DeleteUserDto) {

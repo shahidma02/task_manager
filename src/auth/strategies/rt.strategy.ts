@@ -11,9 +11,11 @@ export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
       secretOrKey: 'rt-secret',
       passReqToCallback: true,
     });
+    
   }
 
   validate(req: Request, payload: any) {
+    console.log('helloooo')
     const refreshToken = req
       ?.get('authorization')
       ?.replace('Bearer', '')
