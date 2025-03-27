@@ -12,16 +12,26 @@ import { TasksModule } from './tasks/tasks.module';
 import { TodosModule } from './todos/todos.module';
 import { CommentsModule } from './comments/comments.module';
 import { InvitesModule } from './invites/invites.module';
-
+import { AtGuard } from './auth/common/gurads';
 
 @Module({
-  imports: [UsersModule, CompanyModule, AuthModule, ProjectsModule, TasksModule, TodosModule, CommentsModule, InvitesModule],
+  imports: [
+    UsersModule,
+    CompanyModule,
+    AuthModule,
+    ProjectsModule,
+    TasksModule,
+    TodosModule,
+    CommentsModule,
+    InvitesModule,
+  ],
   controllers: [AppController],
-  providers: [AppService,
-  //   {
-  //     provide: APP_GUARD,
-  //     useClass: AuthGuard,
-  // },
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
   ],
 })
 export class AppModule {}
