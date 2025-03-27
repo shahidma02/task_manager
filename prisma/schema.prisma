@@ -41,6 +41,7 @@ model User {
   name  String
   password  String
   created_at  DateTime  @default(now())
+  hashRT String?
   userCompanies  User_Company[]
   project_user_co Project_User_Co[]  
   assigned Assigned[]  

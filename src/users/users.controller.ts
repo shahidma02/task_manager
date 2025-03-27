@@ -20,11 +20,11 @@ import { Role } from 'src/roles/role.enum';
 export class UsersController {
   constructor(private userServices: UsersService) {}
 
-  @Public()
-  @Post('/signup')
-  async create(@Body() createUserDto: CreateUserDto) {
-    return await this.userServices.signup(createUserDto);
-  }
+  // @Public()
+  // @Post('/signup')
+  // async create(@Body() createUserDto: CreateUserDto) {
+  //   return await this.userServices.signup(createUserDto);
+  // }
 
   @Get()
   async findAll() {

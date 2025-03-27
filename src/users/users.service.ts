@@ -13,24 +13,24 @@ import { UpdateUserDto } from './updateUserDTO';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async signup(payload: CreateUserDto): Promise<SignupResponse> {
-    const existingUser = await this.prisma.user.findFirst({
-      where: { email: payload.email },
-    });
+  // async signup(payload: CreateUserDto): Promise<SignupResponse> {
+  //   const existingUser = await this.prisma.user.findFirst({
+  //     where: { email: payload.email },
+  //   });
 
-    if (existingUser) {
-      throw new BadRequestException('Email already in use', {
-        cause: new Error(),
-        description: 'A user with this email already exists',
-      });
-    }
+  //   if (existingUser) {
+  //     throw new BadRequestException('Email already in use', {
+  //       cause: new Error(),
+  //       description: 'A user with this email already exists',
+  //     });
+  //   }
 
-    const hash = await bcrypt.hash(payload.password.toString(), 10);
-    payload.password = hash;
-    return await this.prisma.user.create({
-      data: payload,
-    });
-  }
+  //   const hash = await bcrypt.hash(payload.password.toString(), 10);
+  //   payload.password = hash;
+  //   return await this.prisma.user.create({
+  //     data: payload,
+  //   });
+  // }
 
   async findAll() {
     return this.prisma.user.findMany();
