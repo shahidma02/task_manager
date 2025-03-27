@@ -10,4 +10,9 @@ export class assignTodoDTO {
   @IsPositive()
   @IsNotEmpty()
   userId: number;
+
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty()
+  taskId: number;
 }

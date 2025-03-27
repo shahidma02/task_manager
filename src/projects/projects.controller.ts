@@ -18,16 +18,18 @@ import { addUserDTO } from './addUserDTO';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { Company, Role } from '@prisma/client';
-import { ProjectInterceptor } from 'src/common/interceptor/project.inceptor';
-
+import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
+import { UpdateCompanyDTO } from 'src/company/updateCompanyDTO';
+import { UpdateProjectDTO } from './updateProjectDto';
+import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectService: ProjectsService) {}
 
-  @UseGuards(AuthGuard,RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
-  @Post('/create')  
+  @Post('/create')
   async create(@Req() req, @Body() createProjectDTO: CreateProjectDTO) {
     const userId = req.user.sub;
     return await this.projectService.create(userId, createProjectDTO);
@@ -36,18 +38,21 @@ export class ProjectsController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
-  async findAll(companyId:number) {
+  async findAll(companyId: number) {
     return await this.projectService.findAll(companyId);
   }
 
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.MEMBER)
+  @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Get('/:id')
-  async findOne(@Param('id') id: string, companyId:number) {
-    return await this.projectService.findOne(Number(id),companyId);
+  async findOne(@Param('id') id: string, @Body() payload: UpdateProjectDTO) {
+    return await this.projectService.findOne(Number(id), payload);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @UseInterceptors(ProjectInterceptor)
   @Patch('/:id')
   async updateProject(
     @Param('id') id: number,
@@ -56,15 +61,20 @@ export class ProjectsController {
     return await this.projectService.updateProject(id, createProjectDto);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @UseInterceptors(ProjectInterceptor)
   @Delete('/:id')
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number, @Body() payload: UpdateProjectDTO) {
     return await this.projectService.remove(id);
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseInterceptors(ProjectBodyInterceptor)
   @Post('/add-user')
-  // @UseGuards(AuthGuard)
-  @Public()
   async addUser(@Body() payload: addUserDTO) {
+    console.log('hiiiii');
     return await this.projectService.addUser(payload);
   }
 }

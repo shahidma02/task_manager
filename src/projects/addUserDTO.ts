@@ -1,7 +1,4 @@
-import {
-  IsInt,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class addUserDTO {
   @IsNotEmpty()
@@ -11,4 +8,8 @@ export class addUserDTO {
   @IsNotEmpty()
   @IsInt()
   projectId: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  companyId: number;
 }

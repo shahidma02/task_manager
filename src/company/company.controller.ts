@@ -18,6 +18,7 @@ import { Roles } from 'src/roles/roles.decorator';
 import { Role } from '@prisma/client';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { DeleteUserDto } from './deleteUserDto';
+import { RolesParamGuard } from 'src/roles/rolesParam.guard';
 
 @UseGuards(AuthGuard)
 @Controller('company')
@@ -38,37 +39,35 @@ export class CompanyController {
   }
 
   @Get('/:id')
-  async findOne(@Param('id') id: number,@Request() req) {
+  async findOne(@Param('id') id: number, @Request() req) {
     const userId = req.user.sub;
-    console.log(userId)
-    return await this.companyService.findOne(id,userId);
+    console.log(userId);
+    return await this.companyService.findOne(id, userId);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesParamGuard)
   @Roles(Role.ADMIN)
   @Patch('/:id')
   async updateCompany(
     @Param('id') id: number,
     @Body() updateCompanyDto: UpdateCompanyDTO,
   ) {
-    console.log('init')
+    console.log('init');
     return await this.companyService.updateCompany(id, updateCompanyDto);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesParamGuard)
   @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.companyService.remove(id);
-  } 
-  
+  }
+
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Delete()
-  async removeUser(@Body() payload:DeleteUserDto) {
-    console.log(payload)
+  async removeUser(@Body() payload: DeleteUserDto) {
+    console.log(payload);
     return await this.companyService.removeUser(payload);
-  } 
-
-
+  }
 }

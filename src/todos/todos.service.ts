@@ -23,8 +23,11 @@ export class TodosService {
     return todo;
   }
 
-  async findAll() {
-    return this.prisma.todo.findMany();
+  async findAll(taskId: number) {
+    console.log('task is', taskId);
+    return this.prisma.todo.findMany({
+      where: { taskId: taskId },
+    });
   }
 
   async findOne(id: number) {
@@ -74,7 +77,7 @@ export class TodosService {
 
     if (!userProject) {
       throw new NotFoundException(
-        `User with ID ${payload.userId} is not part of this project`,
+        `Users with ID ${payload.userId} is not part of this project`,
       );
     }
 

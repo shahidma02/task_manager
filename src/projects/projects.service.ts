@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProjectDTO } from './createProjectDto';
 import { PrismaService } from 'src/prisma.service';
 import { addUserDTO } from './addUserDTO';
+import { UpdateProjectDTO } from './updateProjectDto';
 
 @Injectable()
 export class ProjectsService {
@@ -27,26 +28,25 @@ export class ProjectsService {
       data: {
         userId: id,
         projectId: project.id,
-        
       },
     });
 
     return project;
   }
 
-  async findAll(companyId:number) {
-    return this.prisma.project.findMany(
-      {
-        where:{companyId:companyId}
-      }
-    );
+  async findAll(companyId: number) {
+    return this.prisma.project.findMany({
+      where: { companyId: companyId },
+    });
   }
 
-  async findOne(projectId: number, companyId:number) {
-    const project = await this.prisma.project.findUnique({ where: {
-      id: projectId,
-      companyId: companyId, 
-    }, });
+  async findOne(projectId: number, payload: UpdateProjectDTO) {
+    const project = await this.prisma.project.findUnique({
+      where: {
+        id: projectId,
+        companyId: payload.companyId,
+      },
+    });
     if (!project) {
       throw new NotFoundException(`Project with ID ${projectId} not found`);
     }
@@ -102,6 +102,7 @@ export class ProjectsService {
       throw new Error('User is not a member of this company');
     }
 
-    return await this.prisma.project_User_Co.create({ data: payload });
+    const { companyId, ...updatedPayload } = payload;
+    return await this.prisma.project_User_Co.create({ data: updatedPayload });
   }
 }

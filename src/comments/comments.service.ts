@@ -1,16 +1,19 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { AddCommentDTO } from './addCommentDTO';
-
 
 @Injectable()
 export class CommentsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addComment(payload: AddCommentDTO) {
+  async addComment(userId, payload: AddCommentDTO) {
     const todo = await this.prisma.todo.findUnique({
       where: { id: payload.todoId },
-      include: { task: { include: { project: true } } }
+      include: { task: { include: { project: true } } },
     });
 
     if (!todo) {
@@ -19,54 +22,65 @@ export class CommentsService {
 
     const userProject = await this.prisma.project_User_Co.findFirst({
       where: {
-        userId: payload.userId,
-        projectId: todo.task.project.id
-      }
+        userId: userId,
+        projectId: todo.task.project.id,
+      },
     });
 
     if (!userProject) {
       throw new ForbiddenException(`User is not part of the project`);
     }
-
     return await this.prisma.comment.create({
       data: {
         text: payload.text,
         todoId: payload.todoId,
-        userId: payload.userId
-      }
+        userId: userId,
+      },
     });
   }
 
-  async getComments(todoId: number) {
+  async getComments(userId, todoId: number) {
     const todo = await this.prisma.todo.findUnique({
-      where: { id: todoId }
+      where: { id: todoId },
+      include: { task: { include: { project: true } } },
     });
 
     if (!todo) {
       throw new NotFoundException(`Todo with ID ${todoId} not found`);
     }
 
+    const userProject = await this.prisma.project_User_Co.findFirst({
+      where: {
+        userId: userId,
+        projectId: todo.task.project.id,
+      },
+    });
+
+    if (!userProject) {
+      throw new ForbiddenException(`User is not part of the project`);
+    }
+
     return await this.prisma.comment.findMany({
       where: { todoId },
-      include: { user: { select: { id: true, name: true, email: true } } }
+      include: { user: { select: { id: true, name: true, email: true } } },
     });
   }
 
-//   async deleteComment(id:number) {
-//     const comment = await this.prisma.comment.findUnique({
-//       where: { id: payload.commentId }
-//     });
+  //   async deleteComment(id:number) {
+  //     const comment = await this.prisma.comment.findUnique({
+  //       where: { id: payload.commentId }
+  //     });
 
-//     if (!comment) {
-//       throw new NotFoundException(`Comment with ID ${payload.commentId} not found`);
-//     }
+  //     if (!comment) {
+  //       throw new NotFoundException(`Comment with ID ${payload.commentId} not found`);
+  //     }
 
-//     if (comment.userId !== payload.userId) {
-//       throw new ForbiddenException(`You can only delete your own comments`);
-//     }
+  //     if (comment.userId !== payload.userId) {
+  //       throw new ForbiddenException(`You can only delete your own comments`);
+  //     }
 
-//     return await this.prisma.comment.delete({
-//       where: { id: payload.commentId }
-//     });
-//   }
+  //     return await this.prisma.comment.delete({
+  //       where: { id: payload.commentId }
+  //     });
+  //   }
 }

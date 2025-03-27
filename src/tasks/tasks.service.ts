@@ -13,8 +13,10 @@ export class TasksService {
     return task;
   }
 
-  async findAll() {
-    return this.prisma.task.findMany();
+  async findAll(projectId) {
+    return this.prisma.task.findMany({
+      where: { projectId: projectId.projectId },
+    });
   }
 
   async findOne(id: number) {

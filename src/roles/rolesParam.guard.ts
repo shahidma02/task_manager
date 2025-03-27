@@ -10,7 +10,7 @@ import { ROLES_KEY } from './roles.decorator';
 import { Role } from '@prisma/client';
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RolesParamGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private prisma: PrismaService,
@@ -31,16 +31,14 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     // console.log('User',user)
-    const body = request.body ?? {};
+    // const body = request.body ?? {};
     // console.log('Body:', body);
 
-    // const param = request.params?.id;
+    const param = request.params?.id;
     // console.log('Param:', param);
 
-    // let companyId = Number(body.companyId ?? param);
+    let companyId = Number(param);
     // console.log('Company ID:', companyId);
-
-    const companyId = body.companyId;
 
     if (!user) {
       throw new ForbiddenException('User not authenticated');

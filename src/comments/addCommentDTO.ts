@@ -8,6 +8,6 @@ export class AddCommentDTO {
   @MinLength(1)
   text: string;
 
-  @IsInt()
-  userId: number;
+  // @IsInt()
+  // userId: number;
 }
