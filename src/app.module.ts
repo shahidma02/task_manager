@@ -13,6 +13,7 @@ import { TodosModule } from './todos/todos.module';
 import { CommentsModule } from './comments/comments.module';
 import { InvitesModule } from './invites/invites.module';
 import { AtGuard } from './auth/common/guards';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AtGuard } from './auth/common/guards';
     TodosModule,
     CommentsModule,
     InvitesModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [

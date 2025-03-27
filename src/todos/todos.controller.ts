@@ -16,8 +16,9 @@ import { assignTodoDTO } from './assignTodoDTO';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateTodoDTO } from './updateTodoDto';
 import { TodoInterceptor } from 'src/common/interceptor/todo.interceptor';
+import { AtGuard } from 'src/auth/common/guards/at.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AtGuard)
 @UseInterceptors(TodoInterceptor)
 @Controller('todos')
 export class TodosController {

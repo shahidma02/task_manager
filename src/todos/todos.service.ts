@@ -4,10 +4,11 @@ import { CreateTodoDTO } from './createTodoDTO';
 import { addDays } from 'date-fns';
 import { assignTodoDTO } from './assignTodoDTO';
 import { UpdateTodoDTO } from './updateTodoDto';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class TodosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private eventsGateway: EventsGateway) {}
 
   async create(payload: CreateTodoDTO): Promise<any> {
     const { duration, ...data } = payload;
@@ -19,7 +20,7 @@ export class TodosService {
         due_at: dueDate,
       },
     });
-
+    this.eventsGateway.sendMessage(todo)
     return todo;
   }
 

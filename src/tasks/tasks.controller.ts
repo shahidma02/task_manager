@@ -15,12 +15,13 @@ import { CreateTaskDTO } from './createTaskDTO';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
 import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
+import { AtGuard } from 'src/auth/common/guards';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AtGuard)
   @UseInterceptors(ProjectBodyInterceptor)
   @Post('/create')
   async create(@Req() req, @Body() createTaskDTO: CreateTaskDTO) {
@@ -28,7 +29,7 @@ export class TasksController {
     return await this.tasksService.create(createTaskDTO);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AtGuard)
   @UseInterceptors(ProjectBodyInterceptor)
   @Get()
   async findAll(@Body() projectId) {
@@ -41,7 +42,7 @@ export class TasksController {
     return await this.tasksService.findOne(Number(id));
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AtGuard)
   @UseInterceptors(ProjectBodyInterceptor)
   @Patch('/:id')
   async updateTask(
