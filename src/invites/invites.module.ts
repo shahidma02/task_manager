@@ -8,17 +8,17 @@ import { AuthModule } from 'src/auth/auth.module';
 import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from 'src/users/users.service';
 import { BullModule } from '@nestjs/bullmq';
-// import { InviteExpirationWorker } from './inviteExpiration.worker';
+import { InviteExpirationWorker } from './inviteExpiration.worker';
 
 @Module({
-  // imports:[BullModule.registerQueue({name:'manage'})],
+  imports: [BullModule.registerQueue({ name: 'manage' })],
   controllers: [InvitesController],
   providers: [
     InvitesService,
     PrismaService,
     AuthService,
     UsersService,
-    // InviteExpirationWorker,
+    InviteExpirationWorker,
     // {
     //   provide: APP_GUARD,
     //   useClass: AuthModule,

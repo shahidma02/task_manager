@@ -8,9 +8,13 @@ import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class TodosService {
-  constructor(private prisma: PrismaService, private eventsGateway: EventsGateway) {}
+  constructor(
+    private prisma: PrismaService,
+    private eventsGateway: EventsGateway,
+  ) {}
 
   async create(payload: CreateTodoDTO): Promise<any> {
+    console.log('creating todo');
     const { duration, ...data } = payload;
     const dueDate = addDays(new Date(), duration);
 
@@ -20,7 +24,24 @@ export class TodosService {
         due_at: dueDate,
       },
     });
-    this.eventsGateway.sendMessage(todo)
+
+    const project = await this.prisma.task.findUnique({
+      where: { id: payload.taskId },
+    });
+
+    if (!project) {
+      throw new Error(`Task with ID ${payload.taskId} not found.`);
+    }
+
+    const projectUsers = await this.prisma.project_User_Co.findMany({
+      where: { projectId: project.projectId },
+      select: { userId: true },
+    });
+    console.log(projectUsers);
+    const userIds = projectUsers.map((user) => user.userId);
+    console.log(userIds);
+    this.eventsGateway.sendMessage(todo);
+    // this.eventsGateway.sendMessageToUsers(userIds, payload);
     return todo;
   }
 

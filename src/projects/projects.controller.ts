@@ -48,6 +48,7 @@ export class ProjectsController {
   @UseInterceptors(ProjectInterceptor)
   @Get('/:id')
   async findOne(@Param('id') id: string, @Body() payload: UpdateProjectDTO) {
+    console.log('in findone projects');
     return await this.projectService.findOne(Number(id), payload);
   }
 

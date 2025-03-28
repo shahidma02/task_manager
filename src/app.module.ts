@@ -27,11 +27,15 @@ import { BullModule } from '@nestjs/bullmq';
     CommentsModule,
     InvitesModule,
     EventsModule,
-    // BullModule.forRoot({connection: {
-    //   host: 'localhost',
-    //   port: 6379,
-    // },defaultJobOptions:{attempts:3  }}),
-    // BullModule.registerQueue({name:'manage'}),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'manage',
+    }),
   ],
   controllers: [AppController],
   providers: [

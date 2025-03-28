@@ -16,17 +16,21 @@ import { Role } from 'src/roles/role.enum';
 import { AuthController } from 'src/auth/auth.controller';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { AtGuard } from 'src/auth/common/guards/at.guard';
-// import { AuthGuard } from 'src/auth/auth.guard';
-
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Controller('invites')
 export class InvitesController {
-  constructor(private inviteServices: InvitesService) {}
+  constructor(
+    private inviteServices: InvitesService,
+    @InjectQueue('manage') private readonly manageInvites: Queue,
+  ) {}
 
   @UseGuards(AtGuard, RolesGuard)
-  @Roles(Role.ADMIN)  
+  @Roles(Role.ADMIN)
   @Post('/send-invite')
   async sendInvite(@Body() inviteDto: SendInviteDto) {
+    // this.manageInvites.add('process', { inviteDto });
     console.log('hello');
     return await this.inviteServices.sendInvite(inviteDto);
   }

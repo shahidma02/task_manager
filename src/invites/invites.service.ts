@@ -8,8 +8,11 @@ import { Queue } from 'bullmq';
 
 @Injectable()
 export class InvitesService {
-  // constructor(private prisma: PrismaService, @InjectQueue('manage') private readonly manageInvites: Queue) {}
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @InjectQueue('manage') private readonly manageInvites: Queue,
+  ) {}
+  // constructor(private prisma: PrismaService) {}
 
   async sendInvite(payload: SendInviteDto) {
     console.log(payload);
@@ -22,14 +25,28 @@ export class InvitesService {
     const invite = await this.prisma.invitation.create({
       data: payload,
     });
-
+    // console.log('adding job');
     // await this.manageInvites.add(
-    //   'expire-invite', 
-    //   { inviteId: invite.id }, 
-    //   { delay: 120000 } 
+    //   'expire-invite',
+    //   { inviteId: invite.id },
+    //   { delay: 120000 },
     // );
 
-    return invite
+    try {
+      console.log('Adding job...');
+      await this.manageInvites.add(
+        'process',
+        { inviteId: invite.id },
+        { delay: 120000 },
+      );
+      console.log('Job added successfully');
+    } catch (err) {
+      console.error('Failed to add job:', err);
+    }
+
+    console.log('Job added to queue');
+
+    return invite;
   }
 
   //   view all invites

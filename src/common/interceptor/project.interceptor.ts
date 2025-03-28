@@ -21,6 +21,9 @@ export class ProjectInterceptor implements NestInterceptor {
     const projectId = Number(request.params.id);
     const userId = request.user?.sub;
 
+    console.log('project param', userId);
+    console.log('project param', projectId);
+
     if (!userId) {
       throw new UnauthorizedException('User not authenticated');
     }
