@@ -11,9 +11,10 @@ import {
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { AddCommentDTO } from './addCommentDTO';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AtGuard } from 'src/auth/common/guards/at.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(AtGuard)
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}

@@ -8,7 +8,7 @@ import { CreateCompanyDTO } from './createCompanyDTO';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateCompanyDTO } from './updateCompanyDTO';
 import { Public } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { UserCompanyDto } from './userCompanyDto';
 import { Role } from 'src/roles/role.enum';
 import { DeleteUserDto } from './deleteUserDto';

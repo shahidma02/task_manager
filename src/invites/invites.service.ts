@@ -3,9 +3,12 @@ import { SendInviteDto } from './sendInviteDTO';
 import { PrismaService } from 'src/prisma.service';
 import { UserCompanyDto } from 'src/company/userCompanyDto';
 import { Role } from 'src/roles/role.enum';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class InvitesService {
+  // constructor(private prisma: PrismaService, @InjectQueue('manage') private readonly manageInvites: Queue) {}
   constructor(private prisma: PrismaService) {}
 
   async sendInvite(payload: SendInviteDto) {
@@ -16,9 +19,17 @@ export class InvitesService {
     if (!user) {
       throw new NotFoundException(`User with ID ${payload.sentTo} not found`);
     }
-    return await this.prisma.invitation.create({
+    const invite = await this.prisma.invitation.create({
       data: payload,
     });
+
+    // await this.manageInvites.add(
+    //   'expire-invite', 
+    //   { inviteId: invite.id }, 
+    //   { delay: 120000 } 
+    // );
+
+    return invite
   }
 
   //   view all invites

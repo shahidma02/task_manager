@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Public } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDTO } from './createProjectDto';
 import { addUserDTO } from './addUserDTO';
@@ -22,12 +22,13 @@ import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
 import { UpdateCompanyDTO } from 'src/company/updateCompanyDTO';
 import { UpdateProjectDTO } from './updateProjectDto';
 import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
+import { AtGuard } from 'src/auth/common/guards/at.guard';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectService: ProjectsService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Post('/create')
   async create(@Req() req, @Body() createProjectDTO: CreateProjectDTO) {
@@ -35,14 +36,14 @@ export class ProjectsController {
     return await this.projectService.create(userId, createProjectDTO);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
   async findAll(companyId: number) {
     return await this.projectService.findAll(companyId);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Get('/:id')
@@ -50,7 +51,7 @@ export class ProjectsController {
     return await this.projectService.findOne(Number(id), payload);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Patch('/:id')
@@ -61,7 +62,7 @@ export class ProjectsController {
     return await this.projectService.updateProject(id, createProjectDto);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Delete('/:id')
@@ -69,7 +70,7 @@ export class ProjectsController {
     return await this.projectService.remove(id);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AtGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @UseInterceptors(ProjectBodyInterceptor)
   @Post('/add-user')

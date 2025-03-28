@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDTO } from './createTaskDTO';
-import { AuthGuard } from 'src/auth/auth.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
 import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
 import { AtGuard } from 'src/auth/common/guards';

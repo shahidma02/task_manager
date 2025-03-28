@@ -13,7 +13,7 @@ import { CreateCompanyDTO } from './createCompanyDTO';
 import { CompanyService } from './company.service';
 import { UpdateCompanyDTO } from './updateCompanyDTO';
 import { Public } from 'src/auth/auth.decorator';
-import { AuthGuard } from 'src/auth/auth.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from '@prisma/client';
 import { RolesGuard } from 'src/roles/roles.guard';

@@ -10,7 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { Public } from './auth.decorator';
 import { CreateUserDto } from 'src/users/createUserDTO';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 import { AtGuard, RtGuard } from './common/guards';
 import { GetCurrentUser } from './common/decorators/getCurrentUser.decorator';
 @Controller('auth')

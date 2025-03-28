@@ -4,7 +4,7 @@ import { CompanyService } from './company.service';
 import { PrismaService } from 'src/prisma.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from 'src/auth/auth.guard';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 
 @Module({
