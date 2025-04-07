@@ -11,26 +11,25 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDTO } from './createTaskDTO';
+import { CreateTaskDTO } from './dto/createTaskDTO';
 // import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
 import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
 import { AtGuard } from 'src/auth/common/guards';
 
+@UseInterceptors(ProjectBodyInterceptor)
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @UseGuards(AtGuard)
-  @UseInterceptors(ProjectBodyInterceptor)
+  // @UseInterceptors(ProjectBodyInterceptor)
   @Post('/create')
   async create(@Req() req, @Body() createTaskDTO: CreateTaskDTO) {
     const userId = req.user.id;
     return await this.tasksService.create(createTaskDTO);
   }
 
-  @UseGuards(AtGuard)
-  @UseInterceptors(ProjectBodyInterceptor)
+  // @UseInterceptors(ProjectBodyInterceptor)
   @Get()
   async findAll(@Body() projectId) {
     return await this.tasksService.findAll(projectId);
@@ -42,8 +41,6 @@ export class TasksController {
     return await this.tasksService.findOne(Number(id));
   }
 
-  @UseGuards(AtGuard)
-  @UseInterceptors(ProjectBodyInterceptor)
   @Patch('/:id')
   async updateTask(
     @Param('id') id: string,

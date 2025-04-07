@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { AddCommentDTO } from './addCommentDTO';
+import { AddCommentDTO } from './dto/addCommentDTO';
 
 @Injectable()
 export class CommentsService {

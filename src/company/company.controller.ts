@@ -9,19 +9,18 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { CreateCompanyDTO } from './createCompanyDTO';
+import { CreateCompanyDTO } from './dto/createCompanyDTO';
 import { CompanyService } from './company.service';
-import { UpdateCompanyDTO } from './updateCompanyDTO';
+import { UpdateCompanyDTO } from './dto/updateCompanyDTO';
 import { Public } from 'src/auth/auth.decorator';
 // import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from '@prisma/client';
 import { RolesGuard } from 'src/roles/roles.guard';
-import { DeleteUserDto } from './deleteUserDto';
+import { DeleteUserDto } from './dto/deleteUserDto';
 import { RolesParamGuard } from 'src/roles/rolesParam.guard';
-import { AtGuard } from 'src/auth/common/guards/at.guard'
+import { AtGuard } from 'src/auth/common/guards/at.guard';
 
-@UseGuards(AtGuard)
 @Controller('company')
 export class CompanyController {
   constructor(private companyService: CompanyService) {}
@@ -34,7 +33,6 @@ export class CompanyController {
 
   @Get()
   async findALl(@Request() req) {
-    // console.log(req.user.sub)
     const userId = req.user.sub;
     return await this.companyService.findAll(userId);
   }
@@ -46,7 +44,7 @@ export class CompanyController {
     return await this.companyService.findOne(id, userId);
   }
 
-  @UseGuards(AtGuard, RolesParamGuard)
+  @UseGuards(RolesParamGuard)
   @Roles(Role.ADMIN)
   @Patch('/:id')
   async updateCompany(
@@ -57,14 +55,14 @@ export class CompanyController {
     return await this.companyService.updateCompany(id, updateCompanyDto);
   }
 
-  @UseGuards(AtGuard, RolesParamGuard)
+  @UseGuards(RolesParamGuard)
   @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
     return await this.companyService.remove(id);
   }
 
-  @UseGuards(AtGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Delete()
   async removeUser(@Body() payload: DeleteUserDto) {

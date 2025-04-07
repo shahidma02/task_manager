@@ -4,11 +4,11 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto } from './createUserDTO';
+import { CreateUserDto } from './dto/createUserDTO';
 import { SignupResponse } from './user';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from 'src/prisma.service';
-import { UpdateUserDto } from './updateUserDTO';
+import { UpdateUserDto } from './dto/updateUserDTO';
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}

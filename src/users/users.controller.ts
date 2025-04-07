@@ -9,9 +9,9 @@ import {
   Query,
   Request,
 } from '@nestjs/common';
-import { CreateUserDto } from './createUserDTO';
+import { CreateUserDto } from './dto/createUserDTO';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './updateUserDTO';
+import { UpdateUserDto } from './dto/updateUserDTO';
 import { Public } from 'src/auth/auth.decorator';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enum';

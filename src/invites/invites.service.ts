@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { SendInviteDto } from './sendInviteDTO';
+import { SendInviteDto } from './dto/sendInviteDTO';
 import { PrismaService } from 'src/prisma.service';
-import { UserCompanyDto } from 'src/company/userCompanyDto';
+import { UserCompanyDto } from 'src/company/dto/userCompanyDto';
 import { Role } from 'src/roles/role.enum';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';

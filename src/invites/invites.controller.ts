@@ -9,7 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { SendInviteDto } from './sendInviteDTO';
+import { SendInviteDto } from './dto/sendInviteDTO';
 import { InvitesService } from './invites.service';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/role.enum';
@@ -26,11 +26,10 @@ export class InvitesController {
     @InjectQueue('manage') private readonly manageInvites: Queue,
   ) {}
 
-  @UseGuards(AtGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(Role.ADMIN)
   @Post('/send-invite')
   async sendInvite(@Body() inviteDto: SendInviteDto) {
-    // this.manageInvites.add('process', { inviteDto });
     console.log('hello');
     return await this.inviteServices.sendInvite(inviteDto);
   }
@@ -47,7 +46,6 @@ export class InvitesController {
     return await this.inviteServices.remove(id);
   }
 
-  @UseGuards(AtGuard)
   @Patch('/:id')
   async acceptInvite(@Param('id') id: number, @Request() req) {
     const userId = req.user.sub;

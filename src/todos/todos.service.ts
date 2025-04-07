@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreateTodoDTO } from './createTodoDTO';
+import { CreateTodoDTO } from './dto/createTodoDTO';
 import { addDays } from 'date-fns';
-import { assignTodoDTO } from './assignTodoDTO';
-import { UpdateTodoDTO } from './updateTodoDto';
+import { assignTodoDTO } from './dto/assignTodoDTO';
+import { UpdateTodoDTO } from './dto/updateTodoDto';
 import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
@@ -33,13 +33,13 @@ export class TodosService {
       throw new Error(`Task with ID ${payload.taskId} not found.`);
     }
 
-    const projectUsers = await this.prisma.project_User_Co.findMany({
-      where: { projectId: project.projectId },
-      select: { userId: true },
-    });
-    console.log(projectUsers);
-    const userIds = projectUsers.map((user) => user.userId);
-    console.log(userIds);
+    // const projectUsers = await this.prisma.project_User_Co.findMany({
+    //   where: { projectId: project.projectId },
+    //   select: { userId: true },
+    // });
+    // console.log(projectUsers);
+    // const userIds = projectUsers.map((user) => user.userId);
+    // console.log(userIds);
     this.eventsGateway.sendMessage(todo);
     // this.eventsGateway.sendMessageToUsers(userIds, payload);
     return todo;
@@ -103,11 +103,15 @@ export class TodosService {
       );
     }
 
-    return await this.prisma.assigned.create({
+    let assign = await this.prisma.assigned.create({
       data: {
         todoId: payload.todoId,
         userId: payload.userId,
       },
     });
+
+    this.eventsGateway.sendMessage(assign);
+
+    return assign;
   }
 }

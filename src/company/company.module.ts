@@ -9,17 +9,6 @@ import { RolesGuard } from 'src/roles/roles.guard';
 
 @Module({
   controllers: [CompanyController],
-  providers: [
-    CompanyService,
-    PrismaService,
-    // {
-    //       provide: APP_GUARD,
-    //       useClass: RolesGuard,
-    //     },
-    //     {
-    //       provide: APP_GUARD,
-    //       useClass: AuthGuard,
-    //     },
-  ],
+  providers: [CompanyService, PrismaService],
 })
 export class CompanyModule {}

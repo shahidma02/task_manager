@@ -8,7 +8,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import * as bcrypt from 'bcryptjs';
-import { CreateUserDto } from 'src/users/createUserDTO';
+import { CreateUserDto } from 'src/users/dto/createUserDTO';
 import { SignupResponse } from 'src/users/user';
 
 @Injectable()

@@ -10,7 +10,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { AddCommentDTO } from './addCommentDTO';
+import { AddCommentDTO } from './dto/addCommentDTO';
 import { AtGuard } from 'src/auth/common/guards/at.guard';
 // import { AuthGuard } from 'src/auth/auth.guard';
 

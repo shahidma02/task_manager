@@ -11,14 +11,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { CreateTodoDTO } from './createTodoDTO';
-import { assignTodoDTO } from './assignTodoDTO';
+import { CreateTodoDTO } from './dto/createTodoDTO';
+import { assignTodoDTO } from './dto/assignTodoDTO';
 // import { AuthGuard } from 'src/auth/auth.guard';
-import { UpdateTodoDTO } from './updateTodoDto';
+import { UpdateTodoDTO } from './dto/updateTodoDto';
 import { TodoInterceptor } from 'src/common/interceptor/todo.interceptor';
 import { AtGuard } from 'src/auth/common/guards/at.guard';
 
-@UseGuards(AtGuard)
 @UseInterceptors(TodoInterceptor)
 @Controller('todos')
 export class TodosController {

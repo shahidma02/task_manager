@@ -6,7 +6,6 @@ import { CompanyModule } from './company/company.module';
 import { AuthModule } from './auth/auth.module';
 
 import { APP_GUARD } from '@nestjs/core';
-// import { AuthGuard } from './auth/auth.guard';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { TodosModule } from './todos/todos.module';
