@@ -21,8 +21,12 @@ export class CommentsController {
 
   @Post()
   async addComment(@Body() createCommentDto: AddCommentDTO, @Request() req) {
-    const userId = req.user.sub;
-    return this.commentsService.addComment(userId, createCommentDto);
+    try {
+      const userId = req.user.sub;
+      return this.commentsService.addComment(userId, createCommentDto);
+    } catch (error) {
+      handleError(error, 'Error adding comment');
+    }
   }
 
   @Get(':todoId')
@@ -30,8 +34,12 @@ export class CommentsController {
     @Param('todoId', ParseIntPipe) todoId: number,
     @Request() req,
   ) {
-    const userId = req.user.sub;
-    return this.commentsService.getComments(userId, todoId);
+    try {
+      const userId = req.user.sub;
+      return this.commentsService.getComments(userId, todoId);
+    } catch (error) {
+      handleError(error, 'Error finding comments');
+    }
   }
 
   // @Delete()

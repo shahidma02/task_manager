@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDTO } from './dto/createTaskDTO';
-// import { AuthGuard } from 'src/auth/auth.guard';
 import { ProjectBodyInterceptor } from 'src/common/interceptor/projectBody.interceptor';
 import { ProjectInterceptor } from 'src/common/interceptor/project.interceptor';
 import { AtGuard } from 'src/auth/common/guards';
@@ -25,20 +24,31 @@ export class TasksController {
   // @UseInterceptors(ProjectBodyInterceptor)
   @Post('/create')
   async create(@Req() req, @Body() createTaskDTO: CreateTaskDTO) {
-    const userId = req.user.id;
-    return await this.tasksService.create(createTaskDTO);
+    try {
+      const userId = req.user.id;
+      return await this.tasksService.create(createTaskDTO);
+    } catch (error) {
+      handleError(error, 'Error creating task');
+    }
   }
 
   // @UseInterceptors(ProjectBodyInterceptor)
   @Get()
   async findAll(@Body() projectId) {
-    return await this.tasksService.findAll(projectId);
+    try {
+      return await this.tasksService.findAll(projectId);
+    } catch (error) {
+      handleError(error, 'Error finding task');
+    }
   }
 
-  // authorize
   @Get('/:id')
   async findOne(@Param('id') id: string) {
-    return await this.tasksService.findOne(Number(id));
+    try {
+      return await this.tasksService.findOne(Number(id));
+    } catch (error) {
+      handleError(error, `Error finding task ${id}`);
+    }
   }
 
   @Patch('/:id')
@@ -46,12 +56,19 @@ export class TasksController {
     @Param('id') id: string,
     @Body() createTaskDTO: CreateTaskDTO,
   ) {
-    return await this.tasksService.updateTask(Number(id), createTaskDTO);
+    try {
+      return await this.tasksService.updateTask(Number(id), createTaskDTO);
+    } catch (error) {
+      handleError(error, `Error updating task ${id}`);
+    }
   }
 
-  //authorize
   @Delete('/:id')
   async remove(@Param('id') id: string) {
-    return await this.tasksService.remove(Number(id));
+    try {
+      return await this.tasksService.remove(Number(id));
+    } catch (error) {
+      handleError(error, `Error deleting task ${id}`);
+    }
   }
 }

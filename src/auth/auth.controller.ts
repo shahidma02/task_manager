@@ -37,7 +37,6 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUser() user) {
     console.log('User in request:', user.sub);
-    // const userId = req.user.sub;
     return this.authService.logoutLocal(user.sub);
   }
 

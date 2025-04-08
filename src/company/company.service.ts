@@ -4,14 +4,15 @@ import {
   NotFoundException,
   UseGuards,
 } from '@nestjs/common';
-import { CreateCompanyDTO } from './dto/createCompanyDTO';
-import { PrismaService } from 'src/prisma.service';
-import { UpdateCompanyDTO } from './dto/updateCompanyDTO';
-import { Public } from 'src/auth/auth.decorator';
-// import { AuthGuard } from 'src/auth/auth.guard';
-import { UserCompanyDto } from './dto/userCompanyDto';
-import { Role } from 'src/roles/role.enum';
-import { DeleteUserDto } from './dto/deleteUserDto';
+import {
+  CreateCompanyDTO,
+  PrismaService,
+  UpdateCompanyDTO,
+  Public,
+  UserCompanyDto,
+  Role,
+  DeleteUserDto,
+} from '../index';
 
 @Injectable()
 export class CompanyService {

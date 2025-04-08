@@ -30,25 +30,41 @@ export class InvitesController {
   @Roles(Role.ADMIN)
   @Post('/send-invite')
   async sendInvite(@Body() inviteDto: SendInviteDto) {
-    console.log('hello');
-    return await this.inviteServices.sendInvite(inviteDto);
+    try {
+      console.log('hello');
+      return await this.inviteServices.sendInvite(inviteDto);
+    } catch (error) {
+      handleError(error, 'Error in sendInvite controller');
+    }
   }
 
   @Get()
   async viewInvites(@Request() req) {
-    const userId = req.user.sub;
-    return this.inviteServices.viewInvites(userId);
+    try {
+      const userId = req.user.sub;
+      return this.inviteServices.viewInvites(userId);
+    } catch (error) {
+      handleError(error, 'Error viewing invite');
+    }
   }
 
   @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
-    return await this.inviteServices.remove(id);
+    try {
+      return await this.inviteServices.remove(id);
+    } catch (error) {
+      handleError(error, 'Error deleting invite');
+    }
   }
 
   @Patch('/:id')
   async acceptInvite(@Param('id') id: number, @Request() req) {
-    const userId = req.user.sub;
-    return await this.inviteServices.acceptInvite(userId, id);
+    try {
+      const userId = req.user.sub;
+      return await this.inviteServices.acceptInvite(userId, id);
+    } catch (error) {
+      handleError(error, 'Error accepting invite');
+    }
   }
 }

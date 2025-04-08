@@ -20,17 +20,15 @@ export class InvitesService {
       where: { id: Number(payload.sentTo) },
     });
     if (!user) {
-      throw new NotFoundException(`User with ID ${payload.sentTo} not found`);
+      handleError(
+        new Error(`User with ID ${payload.sentTo} not found`),
+        `Error in sendInvite method: User with ID ${payload.sentTo} not found`,
+      );
     }
+
     const invite = await this.prisma.invitation.create({
       data: payload,
     });
-    // console.log('adding job');
-    // await this.manageInvites.add(
-    //   'expire-invite',
-    //   { inviteId: invite.id },
-    //   { delay: 120000 },
-    // );
 
     try {
       console.log('Adding job...');
@@ -41,15 +39,12 @@ export class InvitesService {
       );
       console.log('Job added successfully');
     } catch (err) {
-      console.error('Failed to add job:', err);
+      handleError(err, 'Failed to add job to queue');
     }
 
     console.log('Job added to queue');
-
     return invite;
   }
-
-  //   view all invites
 
   async viewInvites(id: number) {
     const invites = await this.prisma.invitation.findMany({

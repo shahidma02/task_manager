@@ -28,12 +28,20 @@ export class UsersController {
 
   @Get()
   async findAll() {
-    return await this.userServices.findAll();
+    try {
+      return await this.userServices.findAll();
+    } catch (error) {
+      handleError(error, 'Error finding users');
+    }
   }
 
   @Get('/:id')
   async findOne(@Param('id') id: number) {
-    return await this.userServices.findOne(Number(id));
+    try {
+      return await this.userServices.findOne(Number(id));
+    } catch (error) {
+      handleError(error, `Error finding user ${id}`);
+    }
   }
 
   @Patch('/:id')
@@ -41,12 +49,20 @@ export class UsersController {
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return await this.userServices.updateUser(id, updateUserDto);
+    try {
+      return await this.userServices.updateUser(id, updateUserDto);
+    } catch (error) {
+      handleError(error, `Error up`);
+    }
   }
 
   @Roles(Role.ADMIN)
   @Delete('/:id')
   async remove(@Param('id') id: number) {
-    return await this.userServices.remove(id);
+    try {
+      return await this.userServices.remove(id);
+    } catch (error) {
+      handleError(error, `Error deleting user ${id}`);
+    }
   }
 }

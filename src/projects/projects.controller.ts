@@ -32,22 +32,33 @@ export class ProjectsController {
   @Roles(Role.ADMIN)
   @Post('/create')
   async create(@Req() req, @Body() createProjectDTO: CreateProjectDTO) {
-    const userId = req.user.sub;
-    return await this.projectService.create(userId, createProjectDTO);
+    try {
+      const userId = req.user.sub;
+      return await this.projectService.create(userId, createProjectDTO);
+    } catch (error) {
+      handleError(error, 'Error creating project');
+    }
   }
 
   @Roles(Role.ADMIN)
   @Get()
   async findAll(companyId: number) {
-    return await this.projectService.findAll(companyId);
+    try {
+      return await this.projectService.findAll(companyId);
+    } catch (error) {
+      handleError(error, 'Error finding projects');
+    }
   }
 
   @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Get('/:id')
   async findOne(@Param('id') id: string, @Body() payload: UpdateProjectDTO) {
-    console.log('in findone projects');
-    return await this.projectService.findOne(Number(id), payload);
+    try {
+      return await this.projectService.findOne(Number(id), payload);
+    } catch (error) {
+      handleError(error, 'Error finding this project');
+    }
   }
 
   @Roles(Role.ADMIN, Role.MEMBER)
@@ -57,21 +68,32 @@ export class ProjectsController {
     @Param('id') id: number,
     @Body() createProjectDto: CreateProjectDTO,
   ) {
-    return await this.projectService.updateProject(id, createProjectDto);
+    try {
+      return await this.projectService.updateProject(id, createProjectDto);
+    } catch (error) {
+      handleError(error, 'Error updating the project');
+    }
   }
 
   @Roles(Role.ADMIN, Role.MEMBER)
   @UseInterceptors(ProjectInterceptor)
   @Delete('/:id')
   async remove(@Param('id') id: number, @Body() payload: UpdateProjectDTO) {
-    return await this.projectService.remove(id);
+    try {
+      return await this.projectService.remove(id);
+    } catch (error) {
+      handleError(error, 'Error deleting project');
+    }
   }
 
   @Roles(Role.ADMIN)
   @UseInterceptors(ProjectBodyInterceptor)
   @Post('/add-user')
   async addUser(@Body() payload: addUserDTO) {
-    console.log('hiiiii');
-    return await this.projectService.addUser(payload);
+    try {
+      return await this.projectService.addUser(payload);
+    } catch (error) {
+      handleError(error, 'Error adding user to the project');
+    }
   }
 }
